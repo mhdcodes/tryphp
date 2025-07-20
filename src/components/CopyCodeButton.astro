@@ -3,10 +3,10 @@ const { code } = Astro.props;
 ---
 
 <button
-  class="top-[0.9rem] right-2 absolute flex items-center gap-1 bg-gray-700 hover:bg-gray-600 px-2 copy-code py-1 rounded font-bold text-sm text-white"
+  class="top-[0.9rem] right-2 absolute flex items-center gap-1 bg-gray-700 hover:bg-gray-600 px-2 copy-code py-1 rounded font-bold text-sm text-white transition-colors duration-300"
   data-code={code}
 >
-  <span>
+  <span class="icon">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="16"
@@ -17,11 +17,12 @@ const { code } = Astro.props;
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
-      ><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path
-        d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg
     >
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
   </span>
-  Copy
+  <span class="label">Copy</span>
 </button>
 
 <script>
@@ -31,17 +32,32 @@ const { code } = Astro.props;
     });
   }
 
-  // Select all buttons with the copy-code class
-  const buttons = document.querySelectorAll<HTMLButtonElement>(".copy-code");
+  const buttons = document.querySelectorAll(".copy-code");
 
   buttons.forEach((button) => {
+    const originalHTML = button.innerHTML;
+
     button.addEventListener("click", () => {
       const code = button.getAttribute("data-code");
       copyToClipboard(code);
-      const oldContent = button.getHTML();
-      button.textContent = "Copied!";
+
+      button.classList.remove("bg-gray-700", "hover:bg-gray-600");
+      button.classList.add("bg-green-600", "hover:bg-green-500");
+
+      button.innerHTML = `
+        <span class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </span>
+        <span class="label">Copied!</span>
+      `;
+
       setTimeout(() => {
-        button.innerHTML = oldContent;
+        button.innerHTML = originalHTML;
+        button.classList.remove("bg-green-600", "hover:bg-green-500");
+        button.classList.add("bg-gray-700", "hover:bg-gray-600");
       }, 3000);
     });
   });
