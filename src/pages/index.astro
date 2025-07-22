@@ -7,7 +7,7 @@ import CopyCodeButton from "../components/CopyCodeButton.astro";
 import TabbedCodeBlock from "../components/TabbedCodeBlock.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
 
-const code = "curl -fsSL https://tryphp.dev/install.sh | bash";
+import { mainInstall, presets, versions } from "../config";
 ---
 
 <Layout>
@@ -57,7 +57,7 @@ const code = "curl -fsSL https://tryphp.dev/install.sh | bash";
           aria-label="visit PHP official website">PHP</a
         > on Linux with a simple curl command 🚀.
       </h1>
-      <p class="text-base text-gray-700 dark:text-gray-300">
+      <p class="text-gray-700 dark:text-gray-300 text-base">
         Simply run the following command in your terminal to install the latest
         version of PHP and all its dependencies including composer.
       </p>
@@ -66,13 +66,13 @@ const code = "curl -fsSL https://tryphp.dev/install.sh | bash";
     <section class="relative">
       <Code
         class="mb-2 p-4 rounded"
-        code={code}
+        code={mainInstall}
         lang="bash"
         theme="catppuccin-mocha"
       />
-      <CopyCodeButton code={code} />
+      <CopyCodeButton code={mainInstall} />
 
-      <p class="flex items-center text-gray-700 text-sm dark:text-gray-300">
+      <p class="flex items-center text-gray-700 dark:text-gray-300 text-sm">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -81,7 +81,7 @@ const code = "curl -fsSL https://tryphp.dev/install.sh | bash";
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-          class="mr-2 fill-none stroke-current"
+          class="fill-none stroke-current mr-2"
         >
           <polyline points="4 17 10 11 4 5"></polyline>
           <line x1="12" x2="20" y1="19" y2="19"></line>
@@ -119,36 +119,7 @@ const code = "curl -fsSL https://tryphp.dev/install.sh | bash";
         flexibility for various projects and environments, ensuring you’re
         running the right version for your application.
       </p>
-      <TabbedCodeBlock
-        id="php-versions"
-        presets={[
-          {
-            id: "php74",
-            preset: "PHP7.4",
-            code: "curl -fsSL https://tryphp.dev/7.4/install.sh | bash",
-          },
-          {
-            id: "php81",
-            preset: "PHP8.1",
-            code: "curl -fsSL https://tryphp.dev/8.1/install.sh | bash",
-          },
-          {
-            id: "php82",
-            preset: "PHP8.2",
-            code: "curl -fsSL https://tryphp.dev/8.2/install.sh | bash",
-          },
-          {
-            id: "php83",
-            preset: "PHP8.3",
-            code: "curl -fsSL https://tryphp.dev/8.3/install.sh | bash",
-          },
-          {
-            id: "php84",
-            preset: "PHP8.4",
-            code: "curl -fsSL https://tryphp.dev/8.4/install.sh | bash",
-          },
-        ]}
-      />
+      <TabbedCodeBlock id="php-versions" presets={versions} />
     </section>
 
     <section>
@@ -158,16 +129,7 @@ const code = "curl -fsSL https://tryphp.dev/install.sh | bash";
         applications. For example, the Laravel preset installs PHP with all the
         necessary extensions to run a Laravel application smoothly.
       </p>
-      <TabbedCodeBlock
-        id="tailored-presets"
-        presets={[
-          {
-            id: "laravel",
-            preset: "Laravel",
-            code: "curl -fsSL https://tryphp.dev/presets/laravel | bash",
-          },
-        ]}
-      />
+      <TabbedCodeBlock id="tailored-presets" presets={presets} />
     </section>
 
     <section>
