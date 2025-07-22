@@ -1,7 +1,8 @@
 import type { APIRoute } from "astro";
+import { presets } from "../../config";
 
 export function getStaticPaths() {
-  return [{ params: { preset: "laravel" } }];
+  return presets.map((p) => ({ params: { preset: p.id } }));
 }
 
 export const GET: APIRoute = async ({ params }) => {

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Enable strict error handling
 set -euo pipefail
@@ -50,10 +50,10 @@ wait_for_apt_lock() {
 get_profile_file() {
     local shell_name
     shell_name=$(basename "$SHELL")
-
+    
     # Set the search order for profile files, based on common conventions
     local profile_files=(".bash_profile" ".bashrc" ".profile" ".zshrc")
-
+    
     # Loop through each profile file, returning the first existing one
     for profile_file in "${profile_files[@]}"; do
         if [[ -f "$HOME/$profile_file" ]]; then
@@ -61,7 +61,7 @@ get_profile_file() {
             return
         fi
     done
-
+    
     # If no common profile file is found, fallback to ~/.profile
     echo "$HOME/.profile"
 }
@@ -116,34 +116,34 @@ sudo apt-get update -y
 # - pcov: Efficient PHP code coverage tool
 info "Installing PHP and extensions...\n"
 sudo apt-get install -y zip unzip \
-  php$PHP_VERSION-fpm \
-  php$PHP_VERSION-cli \
-  php$PHP_VERSION-bcmath \
-  php$PHP_VERSION-curl \
-  php$PHP_VERSION-mbstring \
-  php$PHP_VERSION-intl \
-  php$PHP_VERSION-xml \
-  php$PHP_VERSION-zip \
-  php$PHP_VERSION-mysql \
-  php$PHP_VERSION-sqlite3 \
-  php$PHP_VERSION-pgsql \
-  php$PHP_VERSION-gd \
-  php$PHP_VERSION-imagick \
-  php$PHP_VERSION-igbinary \
-  php$PHP_VERSION-memcached \
-  php$PHP_VERSION-redis \
-  php$PHP_VERSION-xdebug \
-  php$PHP_VERSION-pcov
+php$PHP_VERSION-fpm \
+php$PHP_VERSION-cli \
+php$PHP_VERSION-bcmath \
+php$PHP_VERSION-curl \
+php$PHP_VERSION-mbstring \
+php$PHP_VERSION-intl \
+php$PHP_VERSION-xml \
+php$PHP_VERSION-zip \
+php$PHP_VERSION-mysql \
+php$PHP_VERSION-sqlite3 \
+php$PHP_VERSION-pgsql \
+php$PHP_VERSION-gd \
+php$PHP_VERSION-imagick \
+php$PHP_VERSION-igbinary \
+php$PHP_VERSION-memcached \
+php$PHP_VERSION-redis \
+php$PHP_VERSION-xdebug \
+php$PHP_VERSION-pcov
 
 # Install Laravel required extensions
 info "Installing extensions required by Laravel...\n"
 sudo apt-get install -y openssl \
-  php$PHP_VERSION-imap  \
-  php$PHP_VERSION-ldap \
-  php$PHP_VERSION-msgpack \
-  php$PHP_VERSION-readline \
-  php$PHP_VERSION-soap \
-  php$PHP_VERSION-swoole
+php$PHP_VERSION-imap  \
+php$PHP_VERSION-ldap \
+php$PHP_VERSION-msgpack \
+php$PHP_VERSION-readline \
+php$PHP_VERSION-soap \
+php$PHP_VERSION-swoole
 
 # Switch system's default PHP to the newly installed version
 sudo update-alternatives --set php /usr/bin/php$PHP_VERSION
@@ -169,11 +169,11 @@ sudo chmod +x "$COMPOSER_DIR/composer"
 # Check if /usr/local/bin is already in PATH, and add it if not
 PROFILE_FILE=$(get_profile_file)
 if [[ ":$PATH:" != *":/usr/local/bin:"* ]]; then
-  # Add /usr/local/bin to PATH in the identified profile file
-  printf '\nexport PATH="/usr/local/bin:$PATH"\n' >> "$PROFILE_FILE"
-
-  # Notify user about the PATH modification
-  info "/usr/local/bin has been added to your PATH in $PROFILE_FILE\n"
+    # Add /usr/local/bin to PATH in the identified profile file
+    printf '\nexport PATH="/usr/local/bin:$PATH"\n' >> "$PROFILE_FILE"
+    
+    # Notify user about the PATH modification
+    info "/usr/local/bin has been added to your PATH in $PROFILE_FILE\n"
 fi
 
 # Install PHP with selected extensions

@@ -1,5 +1,6 @@
 ---
 import { Seo } from "astro-seo-meta";
+import { site } from "../config";
 ---
 
 <!doctype html>
@@ -12,8 +13,8 @@ import { Seo } from "astro-seo-meta";
     <meta name="generator" content={Astro.generator} />
     <meta name="msvalidate.01" content="D1916A06C360E731C64F4EEA9FE4BC08" />
     <Seo
-      title="TryPHP - Effortlessly set up PHP on Linux with a simple curl command"
-      description="Effortlessly set up PHP on Linux with a simple curl command"
+      title={site.title}
+      description={site.description}
       keywords={[
         "PHP environment setup",
         "Install PHP easily",
@@ -30,18 +31,18 @@ import { Seo } from "astro-seo-meta";
       ]}
       facebook={{
         image: "/cover.png",
-        url: "https://tryphp.dev",
+        url: site.url,
         type: "website",
       }}
       twitter={{
         image: "/cover.png",
-        site: "@the_dijkstra",
+        site: "@mhdcode",
         card: "summary",
       }}
     />
   </head>
   <body
-    class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300"
+    class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300"
   >
     <slot />
   </body>
