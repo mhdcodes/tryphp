@@ -8,7 +8,7 @@ import sitemap from "@astrojs/sitemap";
 // https://astro.build/config
 export default defineConfig({
   output: "static",
-  // site: "https://tryphp.dev",
-  site: "http://localhost:4321",
+  site: "https://tryphp.dev",
+  //site: "http://localhost:4321",
   integrations: [tailwind(), sitemap()],
 });
