@@ -22,6 +22,9 @@ importers:
       astro-seo-meta:
         specifier: ^4.2.0
         version: 4.2.0(astro@5.12.2(@types/node@24.1.0)(jiti@1.21.7)(rollup@4.45.1)(typescript@5.8.3)(yaml@2.8.0))
+      astro-seo-schema:
+        specifier: ^5.0.0
+        version: 5.0.0(astro@5.12.2(@types/node@24.1.0)(jiti@1.21.7)(rollup@4.45.1)(typescript@5.8.3)(yaml@2.8.0))(schema-dts@1.1.5)
       tailwindcss:
         specifier: ^3.4.17
         version: 3.4.17
@@ -1101,6 +1104,15 @@ packages:
       }
     peerDependencies:
       astro: ^4.0.0
+
+  astro-seo-schema@5.0.0:
+    resolution:
+      {
+        integrity: sha512-rbP9BUxvqH4tdgG5VEYDcoAxUhVKv93TdHRQ5zbYUxee1TKAWsNcAG3nqavX83QTTGqU5anvikMcJZXWhGN9wg==,
+      }
+    peerDependencies:
+      astro: ^5.0.0
+      schema-dts: ^1.1.0
 
   astro@5.12.2:
     resolution:
@@ -2837,6 +2849,12 @@ packages:
         integrity: sha512-+aWOz7yVScEGoKNd4PA10LZ8sk0A/z5+nXQG5giUO5rprX9jgYsTdov9qCchZiPIZezbZH+jRut8nPodFAX4Jg==,
       }
 
+  schema-dts@1.1.5:
+    resolution:
+      {
+        integrity: sha512-RJr9EaCmsLzBX2NDiO5Z3ux2BVosNZN5jo0gWgsyKvxKIUL5R3swNvoorulAeL9kLB0iTSX7V6aokhla2m7xbg==,
+      }
+
   semver@7.7.2:
     resolution:
       {
@@ -4267,6 +4285,11 @@ snapshots:
     dependencies:
       astro: 5.12.2(@types/node@24.1.0)(jiti@1.21.7)(rollup@4.45.1)(typescript@5.8.3)(yaml@2.8.0)
 
+  astro-seo-schema@5.0.0(astro@5.12.2(@types/node@24.1.0)(jiti@1.21.7)(rollup@4.45.1)(typescript@5.8.3)(yaml@2.8.0))(schema-dts@1.1.5):
+    dependencies:
+      astro: 5.12.2(@types/node@24.1.0)(jiti@1.21.7)(rollup@4.45.1)(typescript@5.8.3)(yaml@2.8.0)
+      schema-dts: 1.1.5
+
   astro@5.12.2(@types/node@24.1.0)(jiti@1.21.7)(rollup@4.45.1)(typescript@5.8.3)(yaml@2.8.0):
     dependencies:
       "@astrojs/compiler": 2.12.2
@@ -5548,6 +5571,8 @@ snapshots:
       suf-log: 2.5.3
 
   sax@1.4.1: {}
+
+  schema-dts@1.1.5: {}
 
   semver@7.7.2: {}
 
