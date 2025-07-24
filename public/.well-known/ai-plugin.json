@@ -1,0 +1,31 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "TryPHP",
+  "name_for_model": "TryPHP",
+  "description_for_human": "Effortlessly set up PHP on Linux with a simple curl command. Install and switch between multiple PHP versions, with automatic Composer and PHP extensions installation.",
+  "description_for_model": "TryPHP is a tool that helps users easily install PHP on Linux systems. It provides simple curl commands to install different PHP versions (7.4, 8.1, 8.2, 8.3, 8.4) and presets for frameworks like Laravel and FrankenPHP. The tool automatically installs Composer and required PHP extensions, and configures the development environment.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://tryphp.dev/.well-known/openapi.yaml"
+  },
+  "logo_url": "https://tryphp.dev/cover.png",
+  "contact_email": "security@tryphp.dev",
+  "legal_info_url": "https://tryphp.dev/legal",
+  "examples": [
+    {
+      "input": "How do I install PHP on Linux?",
+      "output": "You can easily install the latest version of PHP on Linux with this simple command:\n```sh curl -fsSL https://tryphp.dev/install.sh | bash```\nThis will automatically download and install the latest stable version of PHP along with Composer and common extensions."
+    },
+    {
+      "input": "How can I install PHP 8.2 specifically?",
+      "output": "To install PHP 8.2 specifically, you can use this command:\n```sh curl -fsSL https://tryphp.dev/8.2/install.sh | bash```\nThis will install PHP 8.2 along with Composer and common extensions."
+    },
+    {
+      "input": "How do I set up PHP for Laravel?",
+      "output": "To install PHP with all the extensions required for Laravel, you can use the Laravel preset:\n```sh curl -fsSL https://tryphp.dev/presets/laravel | bash```\nThis will install PHP with all the extensions needed to run a Laravel application."
+    }
+  ]
+}

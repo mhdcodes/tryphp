@@ -1,0 +1,59 @@
+openapi: 3.0.1
+info:
+  title: TryPHP API
+  description: TryPHP is a tool that helps users easily install PHP on Linux systems with simple curl commands.
+  version: "1.0"
+servers:
+  - url: https://tryphp.dev
+paths:
+  /info:
+    get:
+      operationId: getInfo
+      summary: Get information about TryPHP
+      description: Returns information about TryPHP, including available PHP versions and presets.
+      responses:
+        "200":
+          description: Information about TryPHP
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The name of the tool
+                    example: TryPHP
+                  description:
+                    type: string
+                    description: A brief description of the tool
+                    example: Effortlessly set up PHP on Linux with a simple curl command
+                  versions:
+                    type: array
+                    description: Available PHP versions
+                    items:
+                      type: object
+                      properties:
+                        version:
+                          type: string
+                          description: PHP version
+                          example: PHP 8.2
+                        command:
+                          type: string
+                          description: Installation command
+                          example: curl -fsSL https://tryphp.dev/8.2/install.sh | bash
+                  presets:
+                    type: array
+                    description: Available presets
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Preset name
+                          example: Laravel
+                        command:
+                          type: string
+                          description: Installation command
+                          example: curl -fsSL https://tryphp.dev/presets/laravel | bash
+components:
+  schemas: {}

@@ -1,5 +1,6 @@
 ---
 import { Seo } from "astro-seo-meta";
+import { Schema } from "astro-seo-schema";
 import { site } from "../config";
 ---
 
@@ -12,6 +13,7 @@ import { site } from "../config";
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <meta name="msvalidate.01" content="D1916A06C360E731C64F4EEA9FE4BC08" />
+
     <Seo
       title={site.title}
       description={site.description}
@@ -38,6 +40,28 @@ import { site } from "../config";
         image: "/cover.png",
         site: "@mhdcode",
         card: "summary",
+      }}
+    />
+
+    <!-- JSON-LD structured data for better LLM understanding -->
+    <Schema
+      item={{
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: "TryPHP",
+        applicationCategory: "DeveloperApplication",
+        operatingSystem: "Linux",
+        description: site.description,
+        url: site.url,
+        author: {
+          "@type": "Organization",
+          name: "TryPHP",
+          url: site.url,
+          logo: "https://tryphp.dev/cover.png",
+          sameAs: ["https://github.com/mhdcodes"],
+        },
+        softwareVersion: "PHP 7.4 - 8.4",
+        keywords: "PHP installation, PHP environment setup, Linux PHP setup",
       }}
     />
   </head>
