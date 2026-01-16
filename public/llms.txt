@@ -1,0 +1,27 @@
+# tryphp.dev
+> TryPHP: Effortlessly set up PHP on Linux with a single curl command.
+> Simplifies installing PHP and related tools (Composer, extensions, presets).
+
+## Main Pages
+- [Home](https://tryphp.dev/): Overview and install commands for TryPHP.
+- [Install Script](https://tryphp.dev/install.sh): The core installation script for the latest PHP.
+- [PHP 7.4 Preset](https://tryphp.dev/7.4/install.sh): Install PHP 7.4 via curl.
+- [PHP 8.1 Preset](https://tryphp.dev/8.1/install.sh): Install PHP 8.1 via curl.
+- [PHP 8.2 Preset](https://tryphp.dev/8.2/install.sh): Install PHP 8.2 via curl.
+- [PHP 8.3 Preset](https://tryphp.dev/8.3/install.sh): Install PHP 8.3 via curl.
+- [PHP 8.4 Preset](https://tryphp.dev/8.4/install.sh): Install PHP 8.4 via curl.
+
+## Presets
+- [Laravel Preset](https://tryphp.dev/presets/laravel): Tailored installation for Laravel environments.
+- [FrankenPHP Preset](https://tryphp.dev/presets/frankenphp): Tailored installation for the FrankenPHP environment.
+
+## About
+- TryPHP provides easy and fast PHP environment setup for developers and sysadmins.
+- Includes multiple PHP versions, extension installation, and presets for popular frameworks.
+
+## Contact & Contribution
+- GitHub Repository: https://github.com/tryphp-dev
+- License: Open source (review repository for license details)
+
+## Optional
+- FAQ section in page content: covers security, OS support, and contribution details.
