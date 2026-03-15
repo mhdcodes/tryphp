@@ -6,7 +6,7 @@ export function getStaticPaths() {
 }
 
 export const GET: APIRoute = async ({ params }) => {
-  const content = await import(`../../presets/${params.preset}.sh?raw`);
+  const content = await import(`../../scripts/${params.preset}.sh?raw`);
   return new Response(content.default, {
     headers: {
       "Content-Type": "text/plain;charset=UTF-8",

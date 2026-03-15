@@ -50,10 +50,10 @@ wait_for_apt_lock() {
 get_profile_file() {
     local shell_name
     shell_name=$(basename "$SHELL")
-    
+
     # Set the search order for profile files, based on common conventions
     local profile_files=(".bash_profile" ".bashrc" ".profile" ".zshrc")
-    
+
     # Loop through each profile file, returning the first existing one
     for profile_file in "${profile_files[@]}"; do
         if [[ -f "$HOME/$profile_file" ]]; then
@@ -61,7 +61,7 @@ get_profile_file() {
             return
         fi
     done
-    
+
     # If no common profile file is found, fallback to ~/.profile
     echo "$HOME/.profile"
 }
@@ -73,7 +73,7 @@ clear
 ensure_sudo
 
 # Add PHP repository for the specified PHP version
-PHP_VERSION="8.4"
+PHP_VERSION="8.5"
 info "Adding PHP repository...\n"
 sudo apt-get update -y
 sudo apt-get install -y ca-certificates apt-transport-https software-properties-common
@@ -135,6 +135,16 @@ php$PHP_VERSION-redis \
 php$PHP_VERSION-xdebug \
 php$PHP_VERSION-pcov
 
+# Install Laravel required extensions
+info "Installing extensions required by Laravel...\n"
+sudo apt-get install -y openssl \
+php$PHP_VERSION-imap  \
+php$PHP_VERSION-ldap \
+php$PHP_VERSION-msgpack \
+php$PHP_VERSION-readline \
+php$PHP_VERSION-soap \
+php$PHP_VERSION-swoole
+
 # Switch system's default PHP to the newly installed version
 sudo update-alternatives --set php /usr/bin/php$PHP_VERSION
 
@@ -161,10 +171,14 @@ PROFILE_FILE=$(get_profile_file)
 if [[ ":$PATH:" != *":/usr/local/bin:"* ]]; then
     # Add /usr/local/bin to PATH in the identified profile file
     printf '\nexport PATH="/usr/local/bin:$PATH"\n' >> "$PROFILE_FILE"
-    
+
     # Notify user about the PATH modification
     info "/usr/local/bin has been added to your PATH in $PROFILE_FILE\n"
 fi
+
+# Install PHP with selected extensions
+info "Installing Laravel...\n"
+"$COMPOSER_DIR/composer" global --no-interaction require laravel/installer
 
 # Create uninstall command instructions
 UNINSTALL_SCRIPT="sudo apt remove php$PHP_VERSION-*\nsudo rm -rf $COMPOSER_DIR/composer\n"
@@ -172,16 +186,24 @@ UNINSTALL_SCRIPT="sudo apt remove php$PHP_VERSION-*\nsudo rm -rf $COMPOSER_DIR/c
 # Retrieve installed PHP and Composer versions
 PHP_VERSION=$(php --version | awk '/^PHP/ {print $2}')
 COMPOSER_VERSION=$("$COMPOSER_DIR/composer" --version | awk '{print $3}')
+LARAVEL_VERSION=$(laravel --version | awk '{print $3}')
 
 # Display success message with installed versions in a boxed format
 printf "\n"
-success "PHP and Composer have been installed successfully."
+success "PHP, Composer and Laravel have been installed successfully."
 printf "┌─────────────────────────────────────┐\n"
 printf "│ PHP: \e[1m%-30s\e[0m │\n" "$PHP_VERSION"
 printf "│ Composer: \e[1m%-26s\e[0m│\n" "$COMPOSER_VERSION"
+printf "│ Laravel: \e[1m%-26s\e[0m │\n" "$LARAVEL_VERSION"
 printf "└─────────────────────────────────────┘\n\n"
 info "Please restart your terminal or run \e[1m'source $PROFILE_FILE'\e[0m for the changes to take effect.\n\n"
 
 # Display uninstall instructions for PHP and Composer
 info "To uninstall PHP and Composer, run the following commands:\n"
 printf "$UNINSTALL_SCRIPT"
+
+printf "\n"
+
+# Display uninstall instructions for PHP and Composer
+info "To create a new laravel project, run the following command:\n"
+printf "laravel new my-project\n"
