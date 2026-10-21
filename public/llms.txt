@@ -23,6 +23,3 @@
 ## Contact & Contribution
 - GitHub Repository: https://github.com/mhdcodes/tryphp
 - License: MIT
-
-## Optional
-- FAQ section in page content: covers security, OS support, and contribution details.

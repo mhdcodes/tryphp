@@ -1,0 +1,338 @@
+---
+// One command to copy. Choosing a version, a preset, or "read it first"
+// rewrites it. The default state is rendered here, so the page works without
+// JavaScript; the script below handles choices and refreshes support status
+// with the visitor's date.
+import CheckItem from "./CheckItem.astro";
+import CopyCodeButton from "./CopyCodeButton.astro";
+
+import { defaultVersion, extensions, presets, versions } from "../config";
+import {
+  breakableUrl,
+  dotClass,
+  installCommand,
+  pillBase,
+  pillClass,
+  startOfDay,
+  status,
+  statusText,
+  versionScriptPath,
+} from "../lib/support";
+
+const today = startOfDay();
+const current = status(defaultVersion, today);
+const text = statusText(defaultVersion, today);
+const path = versionScriptPath(defaultVersion);
+
+const tab =
+  "-mb-px border-b-2 border-transparent px-2.5 pt-2.5 pb-[9px] text-sm font-medium whitespace-nowrap text-muted hover:text-ink aria-selected:border-accent aria-selected:text-ink short:pt-2 short:pb-[7px]";
+const list =
+  "mt-2.5 grid grid-cols-2 gap-x-6 gap-y-2 text-sm short:mt-2 short:gap-y-1.5 phone:grid-cols-1";
+---
+
+<section
+  class="overflow-hidden rounded-xl border border-line"
+  aria-label="Build your install command"
+  data-builder
+>
+  <div
+    class="flex gap-1 overflow-x-auto border-b border-line bg-subtle px-3 [scrollbar-width:none]"
+    role="tablist"
+    aria-label="What to install"
+  >
+    <button
+      type="button"
+      role="tab"
+      aria-selected="true"
+      data-tab="php"
+      class={tab}
+    >
+      PHP version
+    </button>
+    {presets.map((p) => (
+      <button
+        type="button"
+        role="tab"
+        aria-selected="false"
+        tabindex="-1"
+        data-tab={p.id}
+        class={tab}
+      >
+        {p.name}
+      </button>
+    ))}
+  </div>
+
+  <div class="flex flex-col gap-3.5 px-[18px] py-4 short:gap-2.5 short:px-4 short:py-3">
+    <div data-view="php" class="flex flex-col gap-2.5 short:gap-2">
+      <div
+        class="flex flex-wrap gap-1.5"
+        role="radiogroup"
+        aria-label="PHP version"
+      >
+        {versions.map((v) => (
+          <button
+            type="button"
+            role="radio"
+            aria-checked={v === defaultVersion ? "true" : "false"}
+            tabindex={v === defaultVersion ? 0 : -1}
+            data-version={v.id}
+            class="inline-flex items-center gap-[7px] rounded-md border border-line bg-page px-[11px] py-[5px] text-sm font-semibold tabular-nums hover:border-muted aria-checked:border-ink aria-checked:bg-ink aria-checked:text-page"
+          >
+            <span
+              class:list={[
+                "size-[7px] rounded-full",
+                dotClass[status(v, today).tone],
+              ]}
+              data-dot
+              aria-hidden="true"
+            />
+            {v.id}
+            {v.isDefault && " · latest"}
+          </button>
+        ))}
+      </div>
+      <div class="flex min-h-6 flex-wrap items-center gap-x-3 gap-y-1.5 text-sm text-muted">
+        <span class:list={[pillBase, pillClass[current.tone]]} data-status-pill>
+          {current.label}
+        </span>
+        <span>
+          <span data-status-main>{text.main}</span>
+          <span class="whitespace-nowrap" data-status-left>
+            {text.left}
+          </span>
+        </span>
+      </div>
+    </div>
+    {presets.map((p) => (
+      <p data-view={p.id} class="text-[15px] text-muted" hidden>
+        {p.summary}.
+      </p>
+    ))}
+
+    <div class="flex items-center gap-3 rounded-lg border border-line bg-page py-1.5 pr-1.5 pl-4 font-mono text-[15px]">
+      <span class="min-w-0 flex-1 py-1.5 [overflow-wrap:anywhere]">
+        <span class="mr-2 text-muted select-none">$</span>curl -fsSL{" "}
+        <span data-url set:html={breakableUrl(path)} />{" "}
+        <span class="font-medium text-accent" data-pipe>
+          | bash
+        </span>
+      </span>
+      <CopyCodeButton code={installCommand(path)} />
+    </div>
+
+    <label
+      for="review"
+      class="relative flex cursor-pointer items-center gap-2.5 text-sm phone:items-start"
+    >
+      <input
+        type="checkbox"
+        id="review"
+        class="peer absolute size-px opacity-0"
+      />
+      <span
+        class="relative h-5 w-[34px] flex-none rounded-full bg-line peer-checked:bg-accent peer-checked:after:translate-x-3.5 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent after:absolute after:top-0.5 after:left-0.5 after:size-4 after:rounded-full after:bg-page after:shadow-[0_1px_2px_rgb(0_0_0/0.25)] motion-safe:transition-colors motion-safe:after:transition-transform"
+        aria-hidden="true"
+      ></span>
+      <span>
+        <b class="font-semibold">Read the script before running it</b>{" "}
+        <small class="text-[13px] text-muted phone:block">
+          Pipes it into <code>less</code> instead of <code>bash</code>.
+        </small>
+      </span>
+    </label>
+
+    <details class="border-t border-line pt-3 short:pt-2.5" open>
+      <summary class="cursor-pointer text-sm font-semibold">
+        What this installs
+      </summary>
+      <ul data-view="php" class={list}>
+        <CheckItem>
+          <code>
+            php<span data-version-text>{defaultVersion.id}</span>-cli
+          </code>
+          and{" "}
+          <code>
+            php<span data-version-text>{defaultVersion.id}</span>-fpm
+          </code>{" "}
+          from the ondrej/php PPA
+        </CheckItem>
+        <CheckItem>Composer, checked against its SHA-384 checksum</CheckItem>
+        <CheckItem>
+          <span data-version-text>{defaultVersion.id}</span> becomes the default{" "}
+          <code>php</code>; other versions stay
+        </CheckItem>
+        <CheckItem>
+          {extensions.length} extensions
+          <div class="mt-1.5 flex flex-wrap gap-1">
+            {extensions.map((e) => (
+              <code class="rounded border border-line bg-subtle px-1.5 py-px text-xs">
+                {e}
+              </code>
+            ))}
+          </div>
+        </CheckItem>
+      </ul>
+      {presets.map((p) => (
+        <ul data-view={p.id} class={list} hidden>
+          {p.installs.map((item) => (
+            <CheckItem>{item}</CheckItem>
+          ))}
+        </ul>
+      ))}
+    </details>
+    <script is:inline>
+      // Phones can't fit the install list in one screen: collapse it before
+      // first paint rather than after, so nothing jumps.
+      if (matchMedia("(max-width: 720px)").matches)
+        document.currentScript.previousElementSibling.open = false;
+    </script>
+  </div>
+</section>
+
+<script>
+  import { defaultVersion, presets, versions } from "../config";
+  import {
+    breakableUrl,
+    dotClass,
+    installCommand,
+    pillBase,
+    pillClass,
+    presetScriptPath,
+    startOfDay,
+    status,
+    statusText,
+    versionScriptPath,
+  } from "../lib/support";
+
+  const root = document.querySelector<HTMLElement>("[data-builder]")!;
+  const $ = <T extends Element>(sel: string) => root.querySelector<T>(sel)!;
+  const $$ = <T extends Element>(sel: string) => [
+    ...root.querySelectorAll<T>(sel),
+  ];
+
+  const today = startOfDay();
+  const params = new URLSearchParams(location.search);
+  const presetIds = presets.map((p) => p.id);
+  const versionIds = versions.map((v) => v.id);
+
+  // ?v=8.4, ?preset=laravel and ?review=1 restore a choice, so it can be shared.
+  const state = {
+    tab: presetIds.includes(params.get("preset") ?? "")
+      ? params.get("preset")!
+      : "php",
+    version: versionIds.includes(params.get("v") ?? "")
+      ? params.get("v")!
+      : defaultVersion.id,
+    review: params.get("review") === "1",
+  };
+
+  const tabs = $$<HTMLButtonElement>("[role=tab]");
+  const radios = $$<HTMLButtonElement>("[role=radio]");
+  const review = $<HTMLInputElement>("#review");
+
+  // The page may be older than today: refresh every version's status dot.
+  for (const radio of radios) {
+    const v = versions.find((x) => x.id === radio.dataset.version)!;
+    radio.querySelector("[data-dot]")!.className =
+      `size-[7px] rounded-full ${dotClass[status(v, today).tone]}`;
+  }
+
+  function render() {
+    const version = versions.find((v) => v.id === state.version)!;
+    const path =
+      state.tab === "php"
+        ? versionScriptPath(version)
+        : presetScriptPath(state.tab);
+
+    for (const tab of tabs) {
+      const on = tab.dataset.tab === state.tab;
+      tab.setAttribute("aria-selected", String(on));
+      tab.tabIndex = on ? 0 : -1;
+    }
+    for (const view of $$<HTMLElement>("[data-view]"))
+      view.hidden = view.dataset.view !== state.tab;
+
+    for (const radio of radios) {
+      const on = radio.dataset.version === version.id;
+      radio.setAttribute("aria-checked", String(on));
+      radio.tabIndex = on ? 0 : -1;
+    }
+
+    const s = status(version, today);
+    const text = statusText(version, today);
+    const pill = $<HTMLElement>("[data-status-pill]");
+    pill.className = `${pillBase} ${pillClass[s.tone]}`;
+    pill.textContent = s.label;
+    $("[data-status-main]").textContent = text.main;
+    $("[data-status-left]").textContent = text.left;
+    for (const el of $$("[data-version-text]")) el.textContent = version.id;
+
+    $("[data-url]").innerHTML = breakableUrl(path);
+    $("[data-pipe]").textContent = `| ${state.review ? "less" : "bash"}`;
+    $<HTMLElement>(".copy-code").dataset.code = installCommand(
+      path,
+      state.review,
+    );
+    review.checked = state.review;
+
+    const url = new URL(location.href);
+    for (const key of ["v", "preset", "review"]) url.searchParams.delete(key);
+    if (state.tab !== "php") url.searchParams.set("preset", state.tab);
+    else if (!version.isDefault) url.searchParams.set("v", version.id);
+    if (state.review) url.searchParams.set("review", "1");
+    history.replaceState(null, "", url);
+  }
+
+  // Arrow keys move through tabs and versions, as ARIA tabs and radios do.
+  function step(ids: string[], current: string, key: string) {
+    const delta = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[
+      key
+    ];
+    if (!delta) return null;
+    return ids[(ids.indexOf(current) + delta + ids.length) % ids.length]!;
+  }
+
+  for (const tab of tabs) {
+    tab.addEventListener("click", () => {
+      state.tab = tab.dataset.tab!;
+      render();
+    });
+  }
+  $("[role=tablist]").addEventListener("keydown", (e) => {
+    const ke = e as KeyboardEvent;
+    if (ke.key === "ArrowUp" || ke.key === "ArrowDown") return;
+    const next = step(
+      tabs.map((t) => t.dataset.tab!),
+      state.tab,
+      ke.key,
+    );
+    if (!next) return;
+    state.tab = next;
+    render();
+    tabs.find((t) => t.dataset.tab === next)!.focus();
+  });
+
+  for (const radio of radios) {
+    radio.addEventListener("click", () => {
+      state.version = radio.dataset.version!;
+      render();
+    });
+  }
+  $("[role=radiogroup]").addEventListener("keydown", (e) => {
+    const ke = e as KeyboardEvent;
+    const next = step(versionIds, state.version, ke.key);
+    if (!next) return;
+    ke.preventDefault();
+    state.version = next;
+    render();
+    radios.find((r) => r.dataset.version === next)!.focus();
+  });
+
+  review.addEventListener("change", () => {
+    state.review = review.checked;
+    render();
+  });
+
+  render();
+</script>

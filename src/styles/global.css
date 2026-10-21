@@ -1,9 +1,78 @@
 @import "tailwindcss";
 
-@variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(.dark, .dark *));
+/* Short laptop screens (1366x768, 1024x768 once browser chrome is subtracted):
+   the homepage tightens its vertical rhythm so it still fits one screen. */
+@custom-variant short (@media (max-height: 800px) and (min-width: 721px));
+@custom-variant phone (@media (max-width: 720px));
 
+/* The design sets body copy at line-height 1.55 throughout; keep the size
+   utilities from imposing their own. */
 @theme {
-  --font-sans:
-    "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --text-xs--line-height: 1.55;
+  --text-sm--line-height: 1.55;
+  --text-lg--line-height: 1.55;
+}
+
+/* Fonts come from Astro's Fonts API (astro.config.mjs), colors from the
+   tokens below, so utilities like bg-page or text-muted follow the theme. */
+@theme inline {
+  --font-sans: var(--font-geist);
+  --font-mono: var(--font-geist-mono);
+
+  --color-page: var(--page);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-subtle: var(--subtle);
+  --color-accent: var(--accent);
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+}
+
+:root {
+  color-scheme: light;
+  --page: #ffffff;
+  --ink: #0f1419;
+  --muted: #5c6670;
+  --line: #e3e6ea;
+  --subtle: #f5f7f9;
+  --accent: #2453d6;
+  --good: #1f7a4d;
+  --good-soft: #e3f4ea;
+  --warn: #855600;
+  --warn-soft: #fbf0d6;
+  --bad: #a3261f;
+  --bad-soft: #fbe5e2;
+}
+
+.dark {
+  color-scheme: dark;
+  --page: #0f1216;
+  --ink: #e6e9ed;
+  --muted: #96a0ab;
+  --line: #252b33;
+  --subtle: #161a20;
+  --accent: #7ea2ff;
+  --good: #5fd39a;
+  --good-soft: #12301f;
+  --warn: #f2c25c;
+  --warn-soft: #33270b;
+  --bad: #ff8b80;
+  --bad-soft: #3a1714;
+}
+
+@layer base {
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.92em;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
 }

@@ -6,7 +6,7 @@ import stub from "../../scripts/php.sh?raw";
 
 export function getStaticPaths() {
   return versions.map((v) => ({
-    params: { version: v.id.replace("php", "") },
+    params: { version: v.id },
   }));
 }
 
