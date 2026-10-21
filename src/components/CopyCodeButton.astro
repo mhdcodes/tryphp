@@ -1,64 +1,71 @@
 ---
+type Props = {
+  code: string;
+};
+
 const { code } = Astro.props;
 ---
 
 <button
-  class="top-[0.9rem] right-2 absolute flex items-center gap-1 bg-gray-700 hover:bg-gray-600 px-2 copy-code py-1 rounded font-bold text-sm text-white transition-colors duration-300"
+  type="button"
+  class="copy-code inline-flex flex-none items-center gap-[5px] rounded-[5px] bg-ink px-[9px] py-[5px] font-sans text-xs font-semibold whitespace-nowrap text-page hover:opacity-85 data-copied:bg-good data-copied:opacity-100 motion-safe:transition"
   data-code={code}
 >
-  <span class="icon">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-    </svg>
-  </span>
+  <svg
+    width="13"
+    height="13"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+  </svg>
   <span class="label">Copy</span>
 </button>
 
 <script>
-  function copyToClipboard(text: string | null) {
-    navigator.clipboard.writeText(text ?? "").catch((err) => {
-      console.error("Error copying text: ", err);
-    });
+  // Delegated, and data-code is read on click, so a button whose command
+  // changes after load (the command builder) copies the current command.
+  let live: HTMLElement | undefined;
+
+  function announce(text: string) {
+    if (!live) {
+      live = document.createElement("div");
+      live.className = "sr-only";
+      live.setAttribute("aria-live", "polite");
+      document.body.append(live);
+    }
+    live.textContent = text;
   }
 
-  const buttons = document.querySelectorAll(".copy-code");
+  const timers = new WeakMap<HTMLElement, number>();
 
-  buttons.forEach((button) => {
-    const originalHTML = button.innerHTML;
+  document.addEventListener("click", (event) => {
+    const button = (event.target as Element).closest<HTMLElement>(".copy-code");
+    if (!button) return;
 
-    button.addEventListener("click", () => {
-      const code = button.getAttribute("data-code");
-      copyToClipboard(code);
+    navigator.clipboard
+      .writeText(button.dataset.code ?? "")
+      .then(() => {
+        const label = button.querySelector(".label")!;
+        button.dataset.copied = "";
+        label.textContent = "Copied";
+        announce("Command copied");
 
-      button.classList.remove("bg-gray-700", "hover:bg-gray-600");
-      button.classList.add("bg-green-600", "hover:bg-green-500");
-
-      button.innerHTML = `
-        <span class="icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-        </span>
-        <span class="label">Copied!</span>
-      `;
-
-      setTimeout(() => {
-        button.innerHTML = originalHTML;
-        button.classList.remove("bg-green-600", "hover:bg-green-500");
-        button.classList.add("bg-gray-700", "hover:bg-gray-600");
-      }, 3000);
-    });
+        clearTimeout(timers.get(button));
+        timers.set(
+          button,
+          window.setTimeout(() => {
+            delete button.dataset.copied;
+            label.textContent = "Copy";
+          }, 2000),
+        );
+      })
+      .catch((err) => console.error("Error copying text: ", err));
   });
 </script>

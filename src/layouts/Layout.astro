@@ -1,9 +1,13 @@
 ---
+import { Font } from "astro:assets";
 import { Seo } from "astro-seo-meta";
 import { Schema } from "astro-seo-schema";
 
-import { site } from "../config";
+import { site, versions } from "../config";
 import "../styles/global.css";
+
+const newest = versions[0]!.id;
+const oldest = versions[versions.length - 1]!.id;
 ---
 
 <!doctype html>
@@ -12,10 +16,25 @@ import "../styles/global.css";
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="msvalidate.01" content="D1916A06C360E731C64F4EEA9FE4BC08" />
+    <Font cssVariable="--font-geist" preload />
+    <Font cssVariable="--font-geist-mono" />
 
+    <!-- Apply the theme before first paint: saved choice, else the system's. -->
+    <script is:inline>
+      (() => {
+        let theme = null;
+        try {
+          theme = localStorage.getItem("theme");
+        } catch {}
+        const dark = theme
+          ? theme === "dark"
+          : matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.classList.toggle("dark", dark);
+      })();
+    </script>
     <Seo
       title={site.title}
       description={site.description}
@@ -62,14 +81,12 @@ import "../styles/global.css";
           logo: "https://tryphp.dev/cover.png",
           sameAs: ["https://github.com/mhdcodes"],
         },
-        softwareVersion: "PHP 7.4 - 8.5",
+        softwareVersion: `PHP ${oldest} - ${newest}`,
         keywords: "PHP installation, PHP environment setup, Linux PHP setup",
       }}
     />
   </head>
-  <body
-    class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300"
-  >
+  <body class="bg-page font-sans leading-[1.55] text-ink antialiased">
     <slot />
   </body>
 </html>

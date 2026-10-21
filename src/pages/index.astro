@@ -1,163 +1,80 @@
 ---
-import { Code } from "astro:components";
-
 import Layout from "../layouts/Layout.astro";
 
-import CopyCodeButton from "../components/CopyCodeButton.astro";
-import TabbedCodeBlock from "../components/TabbedCodeBlock.astro";
+import CommandBuilder from "../components/CommandBuilder.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
 
-import { mainInstall, presets, versions } from "../config";
+import { versions } from "../config";
+
+const newest = versions[0]!.id;
+const oldest = versions[versions.length - 1]!.id;
 ---
 
 <Layout>
-  <main class="flex flex-col gap-12 mx-auto px-4 py-10 max-w-4xl">
-    <nav class="flex justify-between items-center">
-      <p class="flex items-center gap-2 font-bold text-xl">
+  <!-- One screen tall: nav, content, footer. Content is anchored to the top,
+       not centred, so switching tabs (which changes the panel's height) never
+       moves the headline. -->
+  <div class="mx-auto flex min-h-dvh max-w-[960px] flex-col px-[max(16px,4vw)] py-5 short:py-2.5 phone:py-3.5">
+    <nav class="flex items-center justify-between gap-4">
+      <a href="/" class="flex items-center gap-2 text-lg font-bold">
         <svg
           class="fill-current"
           xmlns="http://www.w3.org/2000/svg"
-          width="32"
-          height="32"
+          width="24"
+          height="24"
           viewBox="0 0 20 20"
-          ><path
+          aria-hidden="true"
+        >
+          <path
             fill-rule="evenodd"
             d="M10 12v8A10 10 0 0 1 8.17.17L10 2h5a5 5 0 0 1 5 4.99v9.02A4 4 0 0 1 16 20v-2a2 2 0 1 0 0-4h-4l-2-2zm5.5-3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
-          ></path></svg
-        >
+          ></path>
+        </svg>
         TryPHP
-      </p>
-      <div class="flex items-center space-x-4">
+      </a>
+      <div class="flex items-center gap-3.5">
         <ThemeToggle />
         <a
           href="https://github.com/mhdcodes/tryphp"
-          class="hover:opacity-80 transition-opacity"
-          aria-label="visit TryPHP GitHub repository"
+          class="hover:opacity-80 motion-safe:transition-opacity"
+          aria-label="TryPHP on GitHub"
         >
           <svg
-            width="30"
-            height="30"
+            width="22"
+            height="22"
             xmlns="http://www.w3.org/2000/svg"
-            role="img"
             viewBox="0 0 24 24"
             class="fill-current"
-            ><path
-              d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
-            ></path></svg
+            aria-hidden="true"
           >
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+          </svg>
         </a>
       </div>
     </nav>
 
-    <header class="-mb-6">
-      <h1 class="mb-2 font-bold text-2xl">
-        Effortlessly set up <a
-          href="https://www.php.net"
-          class="hover:underline"
-          aria-label="visit PHP official website">PHP</a
-        > on Linux with a simple curl command 🚀.
-      </h1>
-      <p class="text-gray-700 dark:text-gray-300 text-base">
-        Simply run the following command in your terminal to install the latest
-        version of PHP and all its dependencies including composer.
-      </p>
-    </header>
+    <main class="flex flex-1 flex-col gap-6 pt-[clamp(24px,5vh,56px)] pb-5 short:gap-3.5 short:pt-2 short:pb-2.5 phone:gap-[18px] phone:pt-7 phone:pb-3.5">
+      <header class="flex flex-col gap-2 short:gap-1.5">
+        <span class="text-xs font-medium tracking-[0.06em] text-muted uppercase short:hidden">
+          PHP {oldest} to {newest} · Ubuntu-based Linux
+        </span>
+        <h1 class="text-[clamp(30px,4.6vw,44px)] leading-[1.1] font-semibold tracking-[-0.03em] text-balance short:text-[clamp(28px,3.6vw,34px)]">
+          Install PHP on Linux with one command
+        </h1>
+        <p class="max-w-[80ch] text-muted">
+          Pick a version or a framework preset. The command updates to match, so
+          there's only ever one thing to copy.
+        </p>
+      </header>
 
-    <section class="relative">
-      <Code
-        class="mb-2 p-4 rounded"
-        code={mainInstall}
-        lang="bash"
-        theme="catppuccin-mocha"
-      />
-      <CopyCodeButton code={mainInstall} />
+      <CommandBuilder />
+    </main>
 
-      <p class="flex items-center text-gray-700 dark:text-gray-300 text-sm">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="fill-none stroke-current mr-2"
-        >
-          <polyline points="4 17 10 11 4 5"></polyline>
-          <line x1="12" x2="20" y1="19" y2="19"></line>
-        </svg>
-        After running the command above, you should restart your terminal session.
-      </p>
-    </section>
-
-    <section>
-      <h2 class="mb-4 font-semibold text-2xl">What is TryPHP?</h2>
-      <p class="text-lg">
-        This tool simplifies the often time-consuming task of setting up a PHP
-        environment on Linux. With just a single curl command, you can instantly
-        install the latest PHP version, complete with all required dependencies
-        and Composer. It's perfect for developers and system administrators
-        seeking a fast, efficient setup.
-      </p>
-    </section>
-
-    <section>
-      <h2 class="mb-4 font-semibold text-2xl">Features</h2>
-      <ul class="space-y-2 pl-6 list-disc">
-        <li>🔄 Install and switch between multiple PHP versions</li>
-        <li>📦 Automatic Composer installation</li>
-        <li>🧩 Automatic PHP extensions installation</li>
-        <li>🛠️ Development environment configuration</li>
-        <li>🔒 Secure installation process</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2 class="mb-4 font-semibold text-2xl">Custom PHP Versions</h2>
-      <p class="mb-4 text-lg">
-        You can install custom PHP versions tailored to your needs. This allows
-        flexibility for various projects and environments, ensuring you’re
-        running the right version for your application.
-      </p>
-      <TabbedCodeBlock id="php-versions" presets={versions} />
-    </section>
-
-    <section>
-      <h2 class="mb-4 font-semibold text-2xl">Tailored Presets</h2>
-      <p class="mb-4 text-lg">
-        We also support tailored presets for popular frameworks and
-        applications. For example, the Laravel preset installs PHP with all the
-        necessary extensions to run a Laravel application smoothly.
-      </p>
-      <TabbedCodeBlock id="tailored-presets" presets={presets} />
-    </section>
-
-    <section>
-      <h2 class="mb-4 font-semibold text-2xl">FAQ</h2>
-      <ul class="space-y-2 pl-6 list-disc">
-        <li>
-          <span class="font-bold"
-            >Does this tool generate scripts at request time that could be
-            altered to harm users?</span
-          > No, all scripts are pre-built to ensure security and integrity.
-        </li>
-        <li>
-          <span class="font-bold"
-            >Does this tool support other operating systems like Windows or Mac
-            ?</span
-          > Not yet, it's currently Linux-only.
-        </li>
-        <li>
-          <span class="font-bold"
-            >Does this tool install any affiliated code or packages?</span
-          > No, it's fully open-source. You can review and access the source code
-          directly on our GitHub repository.
-        </li>
-        <li>
-          <span class="font-bold">How can I support this project? </span>You can
-          contribute code to our GitHub repository or make a donation.
-        </li>
-      </ul>
-    </section>
-  </main>
+    <footer class="flex flex-wrap justify-between gap-2 border-t border-line pt-3.5 text-[13px] text-muted">
+      <span>
+        Support dates from php.net · Scripts are pre-built at deploy time
+      </span>
+      <span>MIT licensed · open source</span>
+    </footer>
+  </div>
 </Layout>
