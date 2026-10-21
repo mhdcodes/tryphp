@@ -10,6 +10,7 @@
 - [PHP 8.2 Preset](https://tryphp.dev/8.2/install.sh): Install PHP 8.2 via curl.
 - [PHP 8.3 Preset](https://tryphp.dev/8.3/install.sh): Install PHP 8.3 via curl.
 - [PHP 8.4 Preset](https://tryphp.dev/8.4/install.sh): Install PHP 8.4 via curl.
+- [PHP 8.5 Preset](https://tryphp.dev/8.5/install.sh): Install PHP 8.5 via curl.
 
 ## Presets
 - [Laravel Preset](https://tryphp.dev/presets/laravel): Tailored installation for Laravel environments.
@@ -20,8 +21,8 @@
 - Includes multiple PHP versions, extension installation, and presets for popular frameworks.
 
 ## Contact & Contribution
-- GitHub Repository: https://github.com/tryphp-dev
-- License: Open source (review repository for license details)
+- GitHub Repository: https://github.com/mhdcodes/tryphp
+- License: MIT
 
 ## Optional
 - FAQ section in page content: covers security, OS support, and contribution details.

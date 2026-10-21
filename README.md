@@ -68,6 +68,18 @@ curl -fsSL https://tryphp.dev/8.2/install.sh | bash
 curl -fsSL https://tryphp.dev/8.3/install.sh | bash
 ```
 
+#### PHP8.4
+
+```sh
+curl -fsSL https://tryphp.dev/8.4/install.sh | bash
+```
+
+#### PHP8.5
+
+```sh
+curl -fsSL https://tryphp.dev/8.5/install.sh | bash
+```
+
 ### Installing PHP with specific Framework
 
 You can install PHP with tailored presets for different frameworks or applications. For example, the Laravel preset will install PHP with all extensions required to run a Laravel application.
@@ -76,6 +88,12 @@ You can install PHP with tailored presets for different frameworks or applicatio
 
 ```sh
 curl -fsSL https://tryphp.dev/presets/laravel | bash
+```
+
+#### FrankenPHP
+
+```sh
+curl -fsSL https://tryphp.dev/presets/frankenphp | bash
 ```
 
 ## 📚 Documentation
